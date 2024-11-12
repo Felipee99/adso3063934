@@ -61,6 +61,12 @@ main {
             border: 6px solid #fff9;
             height: 200px;
             width: 200px;
+            img{
+              border-radius: 50%;
+              height: 189px;
+              width: 220px;
+              object-fit: cover;
+            }
         }
         h3 {
             font-size: 1.6rem;
