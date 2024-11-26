@@ -11,3 +11,4 @@
 ## URL Utils
 - [SVG Bgs](https://www.svgbackgrounds.com/set/free-svg-backgrounds-and-patterns/)
 - [Image color picker](https://imagecolorpicker.com/#google_vignette)
+- [Font Awesome](https://fontawesome.com/icons)
