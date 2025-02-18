@@ -1,4 +1,4 @@
-body{
+body {
     background-color: #625e5e;
     color: #765454;
     display: flex;
@@ -6,28 +6,55 @@ body{
     font-family: sans-serif;
     justify-content: center;
     min-height: 100dvh;
+
+
+    background: linear-gradient(-45deg, #f57c0b, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    height: 100%;
+
+
 }
-main{
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+main {
     background-color: aquamarine;
     padding: 1rem;
     border-radius: 2rem / 4rem;
     width: 380px;
 
-    header{
-        h1{
+    header {
+        h1 {
             text-align: center;
             border-bottom: 1px solid black;
             margin: 0;
         }
-        section.info{
+
+        section.info {
             display: flex;
             gap: 1rem;
             justify-content: space-between;
-            div{
+
+            div {
                 display: flex;
                 align-items: center;
                 gap: .5rem;
-                span{
+
+                span {
                     border-radius: 50%;
                     background-color: #444;
                     color: #fff;
@@ -40,8 +67,9 @@ main{
             }
         }
     }
-    section.list{
-        article{
+
+    section.list {
+        article {
             background-color: rgba(90, 84, 108, 0.409);
             border-radius: 0.4rem;
             display: flex;
@@ -49,16 +77,20 @@ main{
             margin-bottom: 0.4rem;
             align-items: center;
             gap: 3rem;
-            &.checked{
+
+            &.checked {
                 background-color: #ff06 !important;
+
                 p {
                     text-decoration: line-through;
                 }
             }
+
             input {
                 accent-color: #1a1004;
                 zoom: 1.4;
             }
+
             button {
                 background-color: #2f35319b;
                 border-radius: 50%;
@@ -68,18 +100,22 @@ main{
                 height: 20px;
                 width: 20px;
                 transition: transform 0.4s ease-in;
+
                 &:hover {
                     transform: scale(1.4);
                 }
-                
+
             }
         }
+
         article:nth-child(even) {
             background-color: #44444472;
         }
     }
-    footer{
+
+    footer {
         display: flex;
+
         input {
             border: 1px solid #444;
             border-radius: 0.4rem 0 0 0.4rem;
@@ -87,6 +123,7 @@ main{
             outline: none;
             padding: 0.8rem;
         }
+
         button {
             background-color: #1cbe85eb;
             border-radius: 0 0.4rem 0.4rem 0;
