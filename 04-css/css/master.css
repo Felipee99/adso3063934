@@ -136,5 +136,20 @@ main {
             width: 50px;
             cursor: pointer;
         }
+
+       
+        }
+        #reset {
+            background-color: #c01f1fd7;
+            color: #b1a5956a;
+            border: #1a1004 1px solid;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            margin: auto;
+            margin-bottom: -10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            cursor: pointer;
     }
 }
