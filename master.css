@@ -236,7 +236,7 @@ body.html {
     background-size: cover;
 
     menu {
-        a:is(:link, visited) {
+        a:is(:link, :visited) {
             color: #e75822;
 
             span {
