@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03- Todo List</title>
+    <link rel="stylesheet" href="../master.css">
+    <style>
+        div.todolist {
+    background-color: rgba(10, 34, 85, 0.757);
+    padding: 1.6rem;
+    border-radius: 2rem / 4rem;
+    width: 380px; 
+
+        section.info {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-bottom: 10px;
+
+            div {
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+
+                span {
+                    border-radius: 50%;
+                    background-color: #444;
+                    color: #fff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 30px;
+                    width: 30px;
+                }
+            }
+        }
+    }
+
+    section.list {
+        article {
+            background-color: rgba(90, 84, 108, 0.409);
+            border-radius: 0.4rem;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 0.4rem;
+            align-items: center;
+            gap: 3rem;
+
+            &.checked {
+                background-color: #ff06 !important;
+
+                p {
+                    text-decoration: line-through;
+                }
+            }
+
+            input {
+                accent-color: #1a1004;
+                zoom: 1.4;
+            }
+
+            button {
+                background-color: #2f35319b;
+                border-radius: 50%;
+                color: rgb(255, 255, 255);
+                border: none;
+                cursor: pointer;
+                height: 20px;
+                width: 20px;
+                transition: transform 0.4s ease-in;
+
+                &:hover {
+                    transform: scale(1.4);
+                }
+
+            }
+        }
+
+        article:nth-child(even) {
+            background-color: #44444472;
+        }
+    }
+
+    footer {
+        display: flex;
+
+        input {
+            border: 1px solid #444;
+            border-radius: 0.4rem 0 0 0.4rem;
+            width: 300px;
+            outline: none;
+            padding: 0.8rem;
+        }
+
+        button {
+            background-color: #094872eb;
+            border-radius: 0 0.4rem 0.4rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: antiquewhite;
+            border: none;
+            width: 50px;
+            cursor: pointer;
+        }
+
+       
+        }
+        #reset {
+            background-color: #c01f1fd7;
+            color: #b1a5956a;
+            border: #1a1004 1px solid;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            margin: auto;
+            margin-bottom: -10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+    }
+}
+    </style>
+</head>
+
+<body class="jquery">
+    <nav class="nav">
+        <a href="index.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path
+                    d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
+            </svg>
+        </a>
+    </nav>
+    <main>
+        <header class="header">
+            <h1>03- Todo List</h1>
+            <h2>Construye una aplicación simple de lista de tareas.</h2>
+        </header>
+        <section class="section">
+            <div class="todolist">
+                <header>
+                    <section class="info">
+                        <div class="tasks">
+                            <span class="num-tasks"></span>
+                            <p class="title-task">Task</p>
+                        </div>
+                        <div class="remains">
+                            <span class="num-remains"></span>
+                            <p class="title-remains">Remain</p>
+                        </div>
+                    </section>
+                </header>
+                <section class="list">
+                </section>
+                <footer>
+                    <input type="text" id="input-task" placeholder="Add Task" maxlength="38">
+                    <button id="add">+</button>
+                </footer>
+                <button id="reset">reset</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        $(document).ready(function () {
+
+        })
+    </script>
+</body>
+
+</html>
