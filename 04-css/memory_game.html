@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12- memory game</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body class="jquery">
+    <main>
+        <header class="header">
+            <h1>Memory Game</h1>
+            <h2>A simple memory game built with jQuery</h2>
+        </header>
+        <div id="stats">0 intentos</div>
+        <div id="wrapper">
+            <div id="game">
+            </div>
+        </div>
+    </main>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script>
+        const totalCards = 12;
+        let cards = [];
+        let SelectedCards = [];
+        let currentMove = 0;
+        let currentAttempt = 0;
+
+        let cardTemplate = `<div class="card"><div class="back"></div><div class="face"></div></div>`;
+
+        // Generar 2 copias de cada valor aleatoriamente
+        let valuesUsed = [];
+        for (let i = 0; i < totalCards / 2; i++) {
+            valuesUsed.push(i);
+            valuesUsed.push(i);
+        }
+
+        // Mezclar los valores (Fisher-Yates)
+        for (let i = valuesUsed.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [valuesUsed[i], valuesUsed[j]] = [valuesUsed[j], valuesUsed[i]];
+        }
+
+        function activateCard(e) {
+            // Si ya hay dos cartas activas o la carta clickeada ya está activa, no hace nada
+            if (currentMove < 2 && !e.target.classList.contains("active")) {
+
+                // 💡 Si es la primera carta del intento (currentMove == 0), suma intento
+                if (currentMove === 0) {
+                    currentAttempt++;
+                    document.querySelector("#stats").innerHTML = currentAttempt + ' intentos';
+                }
+
+                // Activa la carta
+                e.target.classList.add("active");
+
+                // Evita agregar la misma carta dos veces
+                if (!SelectedCards[0] || SelectedCards[0] !== e.target) {
+                    SelectedCards.push(e.target);
+                    currentMove++;
+
+                    // Si ya hay dos cartas seleccionadas
+                    if (currentMove === 2) {
+                        const val1 = SelectedCards[0].querySelector(".face").innerHTML;
+                        const val2 = SelectedCards[1].querySelector(".face").innerHTML;
+
+                        if (val1 === val2) {
+                            // Coinciden
+                            SelectedCards = [];
+                            currentMove = 0;
+                        } else {
+                            // No coinciden, se voltean de nuevo
+                            setTimeout(() => {
+                                SelectedCards[0].classList.remove("active");
+                                SelectedCards[1].classList.remove("active");
+                                SelectedCards = [];
+                                currentMove = 0;
+                            }, 600);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        for (let i = 0; i < totalCards; i++) {
+            let div = document.createElement("div");
+            div.innerHTML = cardTemplate;
+            let card = div.firstChild;
+            card.querySelector(".face").innerHTML = `<img src="./img/${valuesUsed[i]}.png" alt="card image" class="img-card">`;
+            card.addEventListener("click", activateCard);
+            document.querySelector("#game").appendChild(card);
+        }
+    </script>
+
+</body>
+
+</html>

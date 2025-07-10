@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokédex</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1>Pokédex</h1>
+    <header>
+        <select id="typeFilter">
+            <option value="all">Todos los tipos</option>
+            <!-- Tipos se agregan con JS -->
+        </select>
+    </header>
+
+    <section id="pokemonContainer">
+        <!-- Aquí irán las cartas de Pokémon -->
+    </section>
+
+    <!-- Modal -->
+    <div id="pokemonModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeModal" style="cursor: pointer;">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
