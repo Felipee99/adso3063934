@@ -21,61 +21,61 @@
         </div>
     </main>
     <script src="js/jquery-3.7.1.min.js"></script>
-    <script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
         const totalCards = 12;
-        let cards = [];
-        let SelectedCards = [];
+        let selectedCards = [];
         let currentMove = 0;
         let currentAttempt = 0;
 
         let cardTemplate = `<div class="card"><div class="back"></div><div class="face"></div></div>`;
 
-        // Generar 2 copias de cada valor aleatoriamente
         let valuesUsed = [];
         for (let i = 0; i < totalCards / 2; i++) {
-            valuesUsed.push(i);
-            valuesUsed.push(i);
+            valuesUsed.push(i, i);
         }
 
-        // Mezclar los valores (Fisher-Yates)
+        // Fisher-Yates Shuffle
         for (let i = valuesUsed.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [valuesUsed[i], valuesUsed[j]] = [valuesUsed[j], valuesUsed[i]];
         }
 
-        function activateCard(e) {
-            // Si ya hay dos cartas activas o la carta clickeada ya está activa, no hace nada
-            if (currentMove < 2 && !e.target.classList.contains("active")) {
+        function activateCard($card) {
+            if (currentMove < 2 && !$card.hasClass("active")) {
 
-                // 💡 Si es la primera carta del intento (currentMove == 0), suma intento
                 if (currentMove === 0) {
                     currentAttempt++;
-                    document.querySelector("#stats").innerHTML = currentAttempt + ' intentos';
+                    $("#stats").text(currentAttempt + " intentos");
                 }
 
-                // Activa la carta
-                e.target.classList.add("active");
+                $card.addClass("active");
 
-                // Evita agregar la misma carta dos veces
-                if (!SelectedCards[0] || SelectedCards[0] !== e.target) {
-                    SelectedCards.push(e.target);
+                if (!selectedCards[0] || selectedCards[0][0] !== $card[0]) {
+                    selectedCards.push($card);
                     currentMove++;
 
-                    // Si ya hay dos cartas seleccionadas
                     if (currentMove === 2) {
-                        const val1 = SelectedCards[0].querySelector(".face").innerHTML;
-                        const val2 = SelectedCards[1].querySelector(".face").innerHTML;
+                        const val1 = selectedCards[0].find(".face").html();
+                        const val2 = selectedCards[1].find(".face").html();
 
                         if (val1 === val2) {
-                            // Coinciden
-                            SelectedCards = [];
+                            selectedCards = [];
                             currentMove = 0;
+
+                            // ✅ Verificar si todas están activas
+                            if ($(".card.active").length === totalCards) {
+                                setTimeout(() => {
+                                    reiniciarJuego();
+                                }, 1000);
+                            }
+
                         } else {
-                            // No coinciden, se voltean de nuevo
                             setTimeout(() => {
-                                SelectedCards[0].classList.remove("active");
-                                SelectedCards[1].classList.remove("active");
-                                SelectedCards = [];
+                                selectedCards[0].removeClass("active");
+                                selectedCards[1].removeClass("active");
+                                selectedCards = [];
                                 currentMove = 0;
                             }, 600);
                         }
@@ -84,16 +84,41 @@
             }
         }
 
+        function crearCartas() {
+            $("#game").empty();
+            selectedCards = [];
+            currentMove = 0;
+            currentAttempt = 0;
+            $("#stats").text("0 intentos");
 
-        for (let i = 0; i < totalCards; i++) {
-            let div = document.createElement("div");
-            div.innerHTML = cardTemplate;
-            let card = div.firstChild;
-            card.querySelector(".face").innerHTML = `<img src="./img/${valuesUsed[i]}.png" alt="card image" class="img-card">`;
-            card.addEventListener("click", activateCard);
-            document.querySelector("#game").appendChild(card);
+            // Re-generar y mezclar valores
+            valuesUsed = [];
+            for (let i = 0; i < totalCards / 2; i++) {
+                valuesUsed.push(i, i);
+            }
+            for (let i = valuesUsed.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [valuesUsed[i], valuesUsed[j]] = [valuesUsed[j], valuesUsed[i]];
+            }
+
+            for (let i = 0; i < totalCards; i++) {
+                const $card = $(cardTemplate);
+                $card.find(".face").html(`<img src="./img/${valuesUsed[i]}.png" alt="card" class="img-card">`);
+                $card.on("click", function () {
+                    activateCard($(this));
+                });
+                $("#game").append($card);
+            }
         }
-    </script>
+
+        function reiniciarJuego() {
+            crearCartas();
+        }
+
+        crearCartas();
+    });
+</script>
+
 
 </body>
 
