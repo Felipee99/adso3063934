@@ -23,8 +23,42 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $maleNames = ['Santiago', 'Sebastián', 'Diego', 'Nicolás', 'Samuel',
+            'Alejandro', 'Daniel', 'Mateo', 'Ángel', 'Miguel', 'Juan', 'José',
+            'Luis', 'Carlos', 'Jorge', 'Fernando', 'Ricardo', 'Francisco',
+            'David', 'Antonio'];
+        
+        $femaleNames = ['Sofía', 'Isabella', 'Valentina', 'Emma', 'Camila',
+            'María', 'Lucía', 'Martina', 'Daniela', 'Sara', 'Ana', 'Paula',
+            'Carmen', 'Julia', 'Laura', 'Andrea', 'Elena', 'Patricia',
+            'Rosa', 'Isabel'];
+
+        // Primero decidimos el género
+        $gender = fake()->randomElement(['male', 'female']);
+        
+        // Seleccionamos un nombre según el género
+        $firstName = $gender === 'male' 
+            ? fake()->randomElement($maleNames)
+            : fake()->randomElement($femaleNames);
+        
+        $url = $gender === 'male'
+            ? 'https://randomuser.me/api/portraits/men/' . fake()->numberBetween(1, 99) . '.jpg'
+            : 'https://randomuser.me/api/portraits/women/' . fake()->numberBetween(1, 99) . '.jpg';
+
+        // Nombre único para guardar la imagen localmente
+        $imageName = 'user_' . uniqid() . '.jpg';
+        $imagePath = public_path('images/' . $imageName);
+
+        // Descargar la imagen y guardarla en public/images
+        file_put_contents($imagePath, file_get_contents($url));
+
         return [
-            'name' => fake()->name(),
+            'document' => fake()->numerify('75########'),
+            'fullname' => $firstName . ' ' . fake()->lastName(),
+            'gender' => $gender,
+            'birthdate' => fake()->date(),
+            'photo' => 'images/' . $imageName, // se guarda la ruta local
+            'phone' => fake()->numerify('300########'),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
@@ -37,7 +71,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
