@@ -8,7 +8,18 @@
         <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="min-h-[100dvh] bg-[url({{ asset('images/bg-welcome.png') }})] bg-cover flex flex-col gap-4 items-center justify-center w-full flex p-8 text-white antialiased">
+@php
+if (Auth::user()->role == 'administrator') {
+    $image = 'images/admin.png';
+} else {
+    $image = 'images/bg-customer.png';
+}
+@endphp
+
+<body class="min-h-[100dvh] bg-[url({{ asset($image) }})] bg-center bg-cover bg-fixed flex flex-col gap-4 items-center justify-center w-full flex p-6 pt-20 ">
+    @include('layouts.navbar')
     @yield('content')
+    @yield('js')
+
 </body>
 </html>
