@@ -12,7 +12,7 @@
 if (Auth::user()->role == 'administrator') {
     $image = 'images/admin.png';
 } else {
-    $image = 'images/bg-customer.png';
+    $image = 'images/customer.png';
 }
 @endphp
 
