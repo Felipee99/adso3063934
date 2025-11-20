@@ -19,6 +19,7 @@ if (Auth::user()->role == 'administrator') {
 <body class="min-h-[100dvh] bg-[url({{ asset($image) }})] bg-center bg-cover bg-fixed flex flex-col gap-4 items-center justify-center w-full flex p-6 pt-20 ">
     @include('layouts.navbar')
     @yield('content')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     @yield('js')
 
 </body>
