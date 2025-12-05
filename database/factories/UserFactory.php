@@ -57,7 +57,7 @@ class UserFactory extends Factory
             'fullname' => $firstName . ' ' . fake()->lastName(),
             'gender' => $gender,
             'birthdate' => fake()->date(),
-            'photo' => 'images/' . $imageName, // se guarda la ruta local
+            'photo' => $imageName, // se guarda la ruta local
             'phone' => fake()->numerify('300########'),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UserExport;
+use App\Imports\UserImport;
 
 class UserController extends Controller
 {
@@ -45,7 +48,7 @@ class UserController extends Controller
             // dd($request ->all());
             if ($request->hasFile('photo')) {
                 $photo = time() . '.' . $request->photo->extension();
-                $request->photo->move(public_path('../../public/images'), $photo);
+                $request->photo->move(public_path('images'), $photo);
             }
         }
         $user = new User;
@@ -75,7 +78,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('users.edit')->with('user', $user);
     }
 
     /**
@@ -83,7 +86,37 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validation = $request->validate([
+            'document' => ['required', 'numeric', 'unique:' . User::class . ',document,' . $user->id],
+            'fullname' => ['required', 'string'],
+            'gender' => ['required'],
+            'birthdate' => ['required', 'date'],
+            'phone' => ['required'],
+            'email' => ['required', 'lowercase', 'email', 'unique:' . User::class . ',email,' . $user->id],
+        ]);
+        if ($validation) {
+            // dd($request->all());
+            if ($request->hasFile('photo')) {
+                $photo = time() . '.' . $request->photo->extension();
+                $request->photo->move(public_path('images'), $photo);
+                if ($request->originphoto != 'no-photo.png') {
+                    unlink(public_path('images/') . $request->originphoto);
+                }
+            } else {
+                $photo = $request->originphoto;
+            }
+        }
+        $user->document = $request->document;
+        $user->fullname = $request->fullname;
+        $user->gender = $request->gender;
+        $user->birthdate = $request->birthdate;
+        // $user->photo = $photo;
+        $user->phone = $request->phone;
+        $user->email = $request->email;
+
+        if ($user->save()) {
+            return redirect('users')->with('message', 'The user: ' . $user->fullname . ' was successfully edited!.');
+        }
     }
 
     /**
@@ -91,6 +124,43 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if($user->photo != 'no-photo.png' && file_exists(public_path('images/').$user->photo)){
+            unlink(public_path('images/').$user->photo);
+        }
+        if ($user->delete()) {
+            return redirect('users')->with('message', 'The user: ' . $user->fullname . ' was successfully deleted!.');
+        }   
     }
+
+    // Search by Scope
+    public function search(Request $request)
+    {
+        $users = User::names($request->q)->orderBy('id', 'desc')->paginate(20);
+        return view('users.search')->with('users', $users);
+    }
+
+    // Export PDF
+    public function pdf() {
+        $users = User::all();
+        $pdf = PDF::loadView('users.pdf', compact('users'));
+        return $pdf->download('allusers.pdf');
+    }
+    // Export Excel
+    public function excel() {
+        return Excel::download(new UserExport, 'allusers.xlsx');
+    }
+    public function import(Request $request) {
+        $request->validate([
+            'excel' => ['required', 'file', 'mimes:xlsx,xls,csv']
+        ]);
+        
+        $file = $request->file('excel');
+        try {
+            Excel::import(new UserImport, $file);
+            return redirect()->back()->with('message', 'Users imported successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error importing file: ' . $e->getMessage());
+        }
+    }
+    
 }
