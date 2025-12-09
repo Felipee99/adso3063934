@@ -10,7 +10,7 @@
 </head>
 @php
 if (Auth::user()->role == 'administrator') {
-    $image = 'images/admin.png';
+    $image = 'images/otro.jpg';
 } else {
     $image = 'images/customer.png';
 }

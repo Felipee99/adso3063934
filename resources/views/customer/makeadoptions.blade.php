@@ -11,21 +11,6 @@
     Module Pets
 </h1>
 
-<div class="join bg-[#000] max-auto">
-    <a href="{{ route('pets.create') }}" class="btn btn-outline btn-success join-item">
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="currentColor" viewBox="0 0 256 256">
-            <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48-88a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path>
-        </svg>
-        <span class="hidden md:inline">Add Pet</span>
-    </a>
-    <a class="btn btn-outline text-white hover:bg-[#fff6] hover:text-white join-item" href="{{ url('export/pets/pdf') }}">
-        Export PDF
-    </a>
-    <a class="btn btn-outline text-white hover:bg-[#fff6] hover:text-white join-item" href="{{ url('export/pets/excel') }}">
-        Export Excel
-    </a>
-</div>
-
 {{-- Search --}}
 <label class="input text-white bg-[#0009] outline-none mb-10">
     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -34,7 +19,7 @@
             <path d="m21 21-4.3-4.3"></path>
         </g>
     </svg>
-    <input type="search" required placeholder="Search" name="qsearch" id="qsearch"/>
+    <input type="search" required placeholder="Search" name="qsearch" id="qsearch" />
 </label>
 
 <div class="overflow-x-auto text-white rounded-box bg-[#fff9]">
@@ -49,7 +34,7 @@
                 <th class="hidden md:table-cell">Age</th>
                 <th class="hidden md:table-cell">Weight</th>
                 <th class="hidden md:table-cell">Active</th>
-                <th>Actions</th>
+                <th class="hidden md:table-cell">Actions</th>
             </tr>
         </thead>
         <tbody class="datalist">
@@ -70,19 +55,12 @@
                 <td class="hidden md:table-cell">{{ $pet->weight }}</td>
                 <td class="hidden md:table-cell">
                     @if ($pet->active == 1)
-                        <div class="badge badge-outline badge-success">Active</div>
+                    <div class="badge badge-outline badge-success">Active</div>
                     @else
-                        <div class="badge badge-outline badge-error">Inactive</div>
+                    <div class="badge badge-outline badge-error">Inactive</div>
                     @endif
-                </td>
                 <td>
                     <a class="btn btn-outline btn-xs" href="{{ url('pets/' . $pet->id) }}">View</a>
-                    <a class="btn btn-outline btn-xs" href="{{ url('pets/' . $pet->id . '/edit') }}">Edit</a>
-                    <a class="btn btn-outline btn-error btn-xs btn-delete" href="javascript:;" data-name="{{ $pet->name }}">Delete</a>
-                    <form class="hidden" action="{{ url('pets/' . $pet->id) }}" method="POST">
-                        @csrf
-                        @method('delete')
-                    </form>
                 </td>
             </tr>
             @endforeach
@@ -126,63 +104,55 @@
 
 @section('js')
 <script>
-$(document).ready(function() {
-    const modal_message = document.getElementById('modal_message');
-    @if(session('message'))
+    $(document).ready(function() {
+        //Modal
+        const modal_message = document.getElementById('modal_message');
+        @if(session('success'))
         modal_message.showModal();
-    @endif
-
-    const modal_delete = document.getElementById('modal_delete');
-
-    // Delete
-    $('table').on('click', '.btn-delete', function() {
-        let name = $(this).data('name');
-        $('.pet-name').text(name);
-        // store the related hidden form so the confirm button can submit it
-        modal_delete._form = $(this).next('form')[0];
-        modal_delete.showModal();
-    });
-
-    $('.btn-confirm').on('click', function(e) {
-        e.preventDefault();
-        if (modal_delete._form) {
-            modal_delete._form.submit();
-        } else {
-            modal_delete.close();
+        @endif
+        // Search
+        function debounce(func, wait) {
+            let timeout
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout)
+                    func(...args)
+                };
+                clearTimeout(timeout)
+                timeout = setTimeout(later, wait)
+            }
         }
-    });
+        const search = debounce(function(query) {
 
-    // Search
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        }
-    }
+            $token = $('meta[name=csrf-token]').attr('content')
 
-    const search = debounce(function(query) {
-        const token = $('input[name=_token]').val();
-        $.post("search/pets", { 'q': query, '_token': token }, function(data) {
-            $('.datalist').html(data).hide().fadeIn(1000);
-        });
-    }, 500);
+            $.post("{{ url('search/makeadoptions') }}", {
+                    'qsearch': query,
+                    '_token': $token
+                },
+                function(data) {
+                    $('.datalist').html(data).hide().fadeIn(1000)
+                }
+            )
+        }, 500)
+        $('body').on('input', '#qsearch', function(event) {
+            event.preventDefault()
+            const query = $(this).val()
 
-    $('body').on('input', '#qsearch', function(event) {
-        event.preventDefault();
-        const query = $(this).val();
-        $('.datalist').html(`<tr>
-            <td colspan="9" class="text-center py-18">
-                <span class="loading loading-spinner loading-xl"></span>
-            </td>
-        </tr>`);
-        if(query != '') search(query);
-        else setTimeout(()=> window.location.replace('pets'), 500);
-    });
-});
+            $('.datalist').html(`<tr>
+                                        <td colspan="8" class="text-center py-18">
+                                            <span class="loading loading-spinner text-warning"></span>
+                                        </td>
+                                    </tr>`)
+
+            if (query != '') {
+                search(query)
+            } else {
+                setTimeout(() => {
+                    window.location.replace('makeadoptions')
+                }, 500)
+            }
+        })
+    })
 </script>
 @endsection

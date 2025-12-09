@@ -49,7 +49,7 @@
     {{-- Pet Image --}}
     <div class="avatar flex flex-col cursor-pointer gap-1 hover:scale-110 transition ease-in justify-center items-center">
         <div class="mask mask-squircle w-60">
-            <img src="{{ asset('images/' . $pet->image) }}" alt="Pet image"/>
+            <img src="{{ asset('image/' . $pet->image) }}" alt="Pet image"/>
         </div>
     </div>
 
@@ -89,6 +89,11 @@
             <li class="list-row">
                 <span class="font-semibold">Breed</span>
                 <span class="text-[#fff9]">{{ $pet->breed }}</span>
+            </li>
+            <ul class="list bg-[#0009] mt-4 text-white rounded-box shadow-md">
+            <li class="list-row">
+                <span class="font-semibold">Location</span>
+                <span class="text-[#fff9]">{{ $pet->location }}</span>
             </li>
 
             <li class="list-row">

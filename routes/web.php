@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PetController;
+use App\Http\Controllers\AdoptionController;
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -72,23 +74,42 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resources([
-        'users' => UserController::class,
-        'pets' =>PetController::class,
-        'adoptions' =>AdoptionController::class
-    ]);
-    // Search
-    Route::post('search/users', [UserController::class, 'search']);
-    Route::post('search/pets', [PetController::class, 'search']);
+    Route::group(['middleware' => 'admin'], function () {
+        Route::resources([
+            'users' => UserController::class,
+            'pets' => PetController::class,
+        ]);
 
-    // Export
-    Route::get('export/users/pdf', [UserController::class, 'pdf']);
-    Route::get('export/users/excel', [UserController::class, 'excel']);
+        Route::get('adoptions', [AdoptionController::class, 'index']);
+        Route::get('adoptions/{id}', [AdoptionController::class, 'show']);
+        Route::get('search/adoptions', [AdoptionController::class, 'search']);
+        Route::post('search/adoptions', [AdoptionController::class, 'search']);
+        Route::post('export/adoptions/pdf', [AdoptionController::class, 'pdf']);
+        // Search
+        Route::post('search/users', [UserController::class, 'search']);
+        Route::post('search/pets', [PetController::class, 'search']);
 
-    Route::get('export/pets/pdf', [PetController::class, 'pdf']);
-    Route::get('export/pets/excel', [PetController::class, 'excel']);
+        // Export
+        Route::get('export/users/pdf', [UserController::class, 'pdf']);
+        Route::get('export/users/excel', [UserController::class, 'excel']);
 
-    Route::post('import/users', [UserController::class, 'import']);});
+        Route::get('export/pets/pdf', [PetController::class, 'pdf']);
+        Route::get('export/pets/excel', [PetController::class, 'excel']);
 
+        Route::post('import/users', [UserController::class, 'import']);
+    });
+    // customer
+    Route::get('myprofile/', [CustomerController::class, 'myprofile']);
+    Route::put('myprofile/{id}', [CustomerController::class, 'updatemyprofile']);
 
+    Route::get('myadoptions/', [CustomerController::class, 'myadoptions']);
+    Route::get('myadoptions/{id}', [CustomerController::class, 'showadoptions']);
+
+    Route::get('makeadoptions/', [CustomerController::class, 'listpets']);
+    Route::get('makeadoptions/{id}', [CustomerController::class, 'confirmadoptions']);
+    Route::post('makeadoptions/{id}', [CustomerController::class, 'makeadoptions']);
+    Route::post('search/makeadoptions', [CustomerController::class, 'search']);
+    
+
+});
 require __DIR__ . '/auth.php';

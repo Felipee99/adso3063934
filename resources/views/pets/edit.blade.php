@@ -121,17 +121,9 @@
             <small class="badge badge-error w-full text-xs py-4">{{ $message }}</small>
             @enderror
 
-            <label class="label text-white">Status</label>
-            <select name="status" class="select bg-[#fff]">
-                <option value="">Select...</option>
-                <option value="0" @selected(old('status', $pet->status) == 'available')>Available</option>
-                <option value="1" @selected(old('status', $pet->status) == 'adopted')>Adopted</option>
-            </select>
-            @error('status')
-            <small class="badge badge-error w-full text-xs py-4">{{ $message }}</small>
-            @enderror
+            
 
-            <label class="label text-white">Active</label>      
+            <label class="label text-white">Active</label>
             <select name="active" class="select bg-[#fff]">
                 <option value="1" @selected(old('active', $pet->active) == 1)>Active</option>
                 <option value="0" @selected(old('active', $pet->active) == 0)>Inactive</option>
