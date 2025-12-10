@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UserExport;
+use Illuminate\Support\Facades\Log;
 use App\Imports\UserImport;
 
 class UserController extends Controller
@@ -35,35 +36,43 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validation = $request->validate([
-            'document' => ['required', 'numeric', 'unique:' . User::class],
+            'document' => ['required', 'numeric', 'unique:users'],
             'fullname' => ['required', 'string'],
             'gender' => ['required'],
             'birthdate' => ['required', 'date'],
             'photo' => ['required', 'image'],
             'phone' => ['required'],
-            'email' => ['required', 'lowercase', 'email', 'unique:' . User::class],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed'],
         ]);
-        if ($validation) {
-            // dd($request ->all());
-            if ($request->hasFile('photo')) {
-                $photo = time() . '.' . $request->photo->extension();
+
+        $photo = 'no-photo.png'; // valor por defecto
+
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            $photo = time() . '.' . $request->photo->extension();
+            try {
                 $request->photo->move(public_path('images'), $photo);
+            } catch (\Exception $e) {
+                Log::error('Error moving uploaded photo (store user): ' . $e->getMessage());
+                return back()->with('error', 'Error saving uploaded photo.');
             }
         }
+
         $user = new User;
-        $user->document = $request->document;
-        $user->fullname = $request->fullname;
-        $user->gender = $request->gender;
-        $user->birthdate = $request->birthdate;
-        $user->photo = $photo;
-        $user->phone = $request->phone;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        if ($user->save()) {
-            return redirect('users')->with('message', 'The user: ' . $user->fullname . ' was successfully added!.');
-        }
+    $user->document = $request->document;
+    $user->fullname = $request->fullname;
+    $user->gender = $request->gender;
+    $user->birthdate = $request->birthdate;
+    $user->photo = $photo;
+    $user->phone = $request->phone;
+    $user->email = $request->email;
+    $user->password = bcrypt($request->password);
+
+    if ($user->save()) {
+        return redirect('users')->with('message', 'The user: ' . $user->fullname . ' was successfully added!.');
     }
+}
+
 
     /**
      * Display the specified resource.
@@ -87,30 +96,34 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validation = $request->validate([
-            'document' => ['required', 'numeric', 'unique:' . User::class . ',document,' . $user->id],
+            'document' => ['required', 'numeric', 'unique:users,document,' . $user->id],
             'fullname' => ['required', 'string'],
             'gender' => ['required'],
             'birthdate' => ['required', 'date'],
             'phone' => ['required'],
-            'email' => ['required', 'lowercase', 'email', 'unique:' . User::class . ',email,' . $user->id],
+            'email' => ['required', 'email', 'unique:users,email,' . $user->id],
         ]);
-        if ($validation) {
-            // dd($request->all());
-            if ($request->hasFile('photo')) {
-                $photo = time() . '.' . $request->photo->extension();
+
+        // process photo if provided
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            $photo = time() . '.' . $request->photo->extension();
+            try {
                 $request->photo->move(public_path('images'), $photo);
-                if ($request->originphoto != 'no-photo.png') {
-                    unlink(public_path('images/') . $request->originphoto);
-                }
-            } else {
-                $photo = $request->originphoto;
+            } catch (\Exception $e) {
+                Log::error('Error moving uploaded photo (update user): ' . $e->getMessage());
+                return back()->with('error', 'Error saving uploaded photo.');
             }
+            if ($request->originphoto != 'no-photo.png') {
+                @unlink(public_path('images/') . $request->originphoto);
+            }
+        } else {
+            $photo = $request->originphoto ?? $user->photo;
         }
         $user->document = $request->document;
         $user->fullname = $request->fullname;
         $user->gender = $request->gender;
         $user->birthdate = $request->birthdate;
-        // $user->photo = $photo;
+        $user->photo = $photo;
         $user->phone = $request->phone;
         $user->email = $request->email;
 

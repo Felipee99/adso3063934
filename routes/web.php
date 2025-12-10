@@ -104,6 +104,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('myadoptions/', [CustomerController::class, 'myadoptions']);
     Route::get('myadoptions/{id}', [CustomerController::class, 'showadoptions']);
+    Route::post('search/myadoptions', [CustomerController::class, 'searchMyAdoptions']);
 
     Route::get('makeadoptions/', [CustomerController::class, 'listpets']);
     Route::get('makeadoptions/{id}', [CustomerController::class, 'confirmadoptions']);

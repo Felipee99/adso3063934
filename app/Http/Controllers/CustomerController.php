@@ -6,6 +6,7 @@ use App\Models\Adoption;
 use App\Models\User;
 use App\Models\Pet;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 
@@ -20,33 +21,39 @@ class CustomerController extends Controller
     }
     public function updatemyprofile(Request $request)
     {
-        // dd($request->all());
         $validation = $request->validate([
-            'document' => ['required', 'numeric', 'unique:' . User::class . ',document,' . $request->id],
+            'document' => ['required', 'numeric', 'unique:users,document,' . $request->id],
             'fullname' => ['required', 'string'],
             'gender' => ['required'],
             'birthdate' => ['required', 'date'],
             'phone' => ['required'],
-            'email' => ['required', 'lowercase', 'email', 'unique:' . User::class . ',email,' . $request->id],
+            'email' => ['required', 'email', 'unique:users,email,' . $request->id],
         ]);
-        if ($validation) {
-            // dd($request->all());
-            if ($request->hasFile('photo')) {
-                $photo = time() . '.' . $request->photo->extension();
-                $request->photo->move(public_path('images'), $photo);
-                if ($request->originphoto != 'no-photo.png') {
-                    unlink(public_path('images/') . $request->originphoto);
+
+        $user = User::find($request->id);
+        $photo = $user->photo;
+
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            $photo = time() . '.' . $request->photo->extension();
+            try {
+                $request->photo->move(public_path('images/'), $photo);
+            } catch (\Exception $e) {
+                Log::error('Error moving uploaded photo (customer update): ' . $e->getMessage());
+                return back()->with('error', 'Error saving uploaded photo.');
+            }
+            if ($user->photo != 'no-photo.png') {
+                $oldPhotoPath = public_path('images/' . $user->photo);
+                if (file_exists($oldPhotoPath)) {
+                    @unlink($oldPhotoPath);
                 }
-            } else {
-                $photo = $request->originphoto;
             }
         }
-        $user = User::find($request->id);
+
         $user->document = $request->document;
         $user->fullname = $request->fullname;
         $user->gender = $request->gender;
         $user->birthdate = $request->birthdate;
-        // $user->photo = $photo;
+        $user->photo = $photo;
         $user->phone = $request->phone;
         $user->email = $request->email;
 
@@ -63,7 +70,7 @@ class CustomerController extends Controller
     public function showadoptions(Request $request)
     {
         $adopts = Adoption::find($request->id);
-        return view('customer.showadoptions')->with('adopts', $adopts);
+        return view('customer.showadoption')->with('adopts', $adopts);
     }
     public function listpets()
     {
@@ -71,7 +78,38 @@ class CustomerController extends Controller
         return view('customer.makeadoptions')->with('pets', $pets);
     }
     public function listadoptions(Request $request) {}
-    public function makeadoptions(Request $request) {}
+
+    public function confirmadoptions($id)
+    {
+        $pet = Pet::findOrFail($id);
+        return view('customer.confirmadoption')->with('pet', $pet);
+        
+    }
+
+    public function makeadoptions(Request $request, $id)
+    {
+        $user = Auth::user();
+        $pet = Pet::findOrFail($id);
+
+        if ($pet->status == 1) {
+            return redirect('makeadoptions')->with('error', 'This pet is already adopted.');
+        }
+
+        try {
+            $adoption = new Adoption();
+            $adoption->user_id = $user->id;
+            $adoption->pet_id = $pet->id;
+            $adoption->save();
+
+            $pet->status = 1; // mark adopted
+            $pet->save();
+
+            return redirect('makeadoptions')->with('message', 'Adoption completed successfully!');
+        } catch (\Exception $e) {
+            Log::error('Error creating adoption: ' . $e->getMessage());
+            return redirect('makeadoptions')->with('error', 'There was an error processing the adoption.');
+        }
+    }
     public function search(Request $request)
     {
         $pets = Pet::kinds($request->q)->orderBy('id', 'desc')->paginate(20);

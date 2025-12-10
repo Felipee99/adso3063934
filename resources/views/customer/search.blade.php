@@ -20,5 +20,8 @@
          <div class="badge badge-outline badge-error">Inactive</div>
          @endif
      </td>
+     <td>
+         <a class="btn btn-outline btn-xs" href="{{ url('pets/' . $pet->id) }}">View</a>
+     </td>
  </tr>
  @endforeach

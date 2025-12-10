@@ -201,7 +201,7 @@
       <img class="w-full h-full object-cover" src="images/1.png" alt="">
     </figure>
     <div class="card-body">
-      <h2 class="card-title">Module Users</h2>
+      <h2 class="card-title">My Profile </h2>
       <ul class="list bg-[#0003] rounded-box shadow-md p-3">
       </ul>
       <div class="card-actions justify-end">
@@ -220,7 +220,7 @@
       <img class="w-full h-full object-cover" src="images/2.png" alt="">
     </figure>
     <div class="card-body">
-      <h2 class="card-title">Module Pets</h2>
+      <h2 class="card-title">Make Adoptions</h2>
       <ul class="list bg-[#0003] rounded-box shadow-md p-3">
       </ul>
       <div class="card-actions justify-end">
@@ -239,7 +239,7 @@
       <img class="w-full h-full object-cover" src="images/3.png" alt="">
     </figure>
     <div class="card-body">
-      <h2 class="card-title">Module Adoptions</h2>
+      <h2 class="card-title">My Adoptions</h2>
       <ul class="list bg-[#0003] rounded-box shadow-md p-3">
       </ul>
       <div class="card-actions justify-end">
@@ -255,6 +255,24 @@
 </div>
 
 @endif
+@if(session('error'))
+<dialog id="modal_error" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Error</h3>
+    <div role="alert" class="alert alert-error alert-soft">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>{{ session('error') }}</span>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button id="btn_close_error">close</button>
+  </form>
+</dialog>
+@endif
+
+@if(session('message'))
 <dialog id="modal_message" class="modal">
   <div class="modal-box">
     <h3 class="text-lg font-bold">Congratulations!</h3>
@@ -266,25 +284,33 @@
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button>close</button>
+    <button id="btn_close_message">close</button>
   </form>
 </dialog>
+@endif
 @endsection
 @section('js')
 <script>
   $(document).ready(function() {
-    // Modal
-    const modal_error = document.getElementById('modal_error')
-    @if(session('error'))
-    modal_error.showModal();
-    @endif
-  });
-  $(document).ready(function() {
-    // Modal
-    const modal_message = document.getElementById('modal_message')
-    @if(session('message'))
-    modal_message.showModal();
-    @endif
+    // Modal: open if session provided, but check element exists
+    const modal_error = document.getElementById('modal_error');
+    if (modal_error) {
+      @if(session('error'))
+      try { modal_error.showModal(); } catch(e) { console.warn('modal_error.showModal failed', e); }
+      @endif
+      // allow explicit close
+      const btnCloseError = document.getElementById('btn_close_error');
+      if (btnCloseError) btnCloseError.addEventListener('click', () => { try { modal_error.close(); } catch(e){} });
+    }
+
+    const modal_message = document.getElementById('modal_message');
+    if (modal_message) {
+      @if(session('message'))
+      try { modal_message.showModal(); } catch(e) { console.warn('modal_message.showModal failed', e); }
+      @endif
+      const btnCloseMsg = document.getElementById('btn_close_message');
+      if (btnCloseMsg) btnCloseMsg.addEventListener('click', () => { try { modal_message.close(); } catch(e){} });
+    }
   });
 </script>
 @endsection
