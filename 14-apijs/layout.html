@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API JS: Larapets</title>
+    <link rel="stylesheet" href="css/master.css" />
+  </head>
+  <body>
+    <!-- View: Login -->
+    <main id="login" >
+      <header>
+        <img src="img/title-login.png" alt="" />
+      </header>
+      <form action="">
+        <label for="email">
+          email
+          <input type="email" name="email" placeholder="example@gmail.com" />
+        </label>
+        <label for="password">
+          password
+          <input type="password" name="password" placeholder="********" />
+        </label>
+        <button type="button" class="btnLogin">login</button>
+      </form>
+    </main>
+    <main id="dashboard" >
+      <header>
+        <img src="img/title-dashboard.png" alt="dasboard" />
+      </header>
+      <section class="list">
+        <div class="row">
+          <img src="img/pet.png" alt="pet" />
+          <div class="data">
+            <h3>Firulais</h3>
+            <h4>Dog</h4>
+          </div>
+          <nav class="actions">
+            <a href="javascript:;" class="btnShow"></a>
+            <a href="javascript:;" class="btnEdit"></a>
+            <a href="javascript:;" class="btnDelete"></a>
+          </nav>
+        </div>
+        <div class="row">
+          <img src="img/pet2.png" alt="pet" />
+          <div class="data">
+            <h3>Michi</h3>
+            <h4>Dog</h4>
+          </div>
+          <nav class="actions">
+            <a href="javascript:;" class="btnShow"></a>
+            <a href="javascript:;" class="btnEdit"></a>
+            <a href="javascript:;" class="btnDelete"></a>
+          </nav>
+        </div>
+        <div class="row">
+          <img src="img/pet4.png" alt="pet" />
+          <div class="data">
+            <h3>Tobi</h3>
+            <h4>Dog</h4>
+          </div>
+          <nav class="actions">
+            <a href="javascript:;" class="btnShow"></a>
+            <a href="javascript:;" class="btnEdit"></a>
+            <a href="javascript:;" class="btnDelete"></a>
+          </nav>
+        </div>
+        <div class="row">
+          <img src="img/pet5.png" alt="pet" />
+          <div class="data">
+            <h3>Matias</h3>
+            <h4>Dog</h4>
+          </div>
+          <nav class="actions">
+            <a href="javascript:;" class="btnShow"></a>
+            <a href="javascript:;" class="btnEdit"></a>
+            <a href="javascript:;" class="btnDelete"></a>
+          </nav>
+        </div>
+        <div class="row">
+          <img src="img/pet6.png" alt="pet" />
+          <div class="data">
+            <h3>Luis</h3>
+            <h4>Dog</h4>
+          </div>
+          <nav class="actions">
+            <a href="javascript:;" class="btnShow"></a>
+            <a href="javascript:;" class="btnEdit"></a>
+            <a href="javascript:;" class="btnDelete"></a>
+          </nav>
+        </div>
+        <div class="row">
+          <img src="img/pet7.png" alt="pet" />
+          <div class="data">
+            <h3>Miguel</h3>
+            <h4>Dog</h4>
+          </div>
+          <nav class="actions">
+            <a href="javascript:;" class="btnShow"></a>
+            <a href="javascript:;" class="btnEdit"></a>
+            <a href="javascript:;" class="btnDelete"></a>
+          </nav>
+        </div>
+      </section>
+      <nav>
+        <a href="javascript:;" class="btnLogout">
+          <img src="img/boton.png" alt="" />
+        </a>
+        <a href="javascript:;" class="btnAdd">
+          <img src="img/boton2png.png" alt="" />
+        </a>
+      </nav>
+    </main>
+    <main id="add" >
+      <header>
+        <a href="javascript:;" class="btnback">
+          <img src="img/btnBack.svg" alt="" />
+        </a>
+        <img src="img/title-add.png" alt="" />
+      </header>
+      <form action="">
+        <label for="Nombre">
+          Nombre
+          <input type="text" name="nombre" placeholder="messi Ronaldo" />
+        </label>
+        <label for="Tipo">
+          Tipo:
+          <input type="text" name="tipo" placeholder="Dog" />
+        </label>
+        <label for="Peso">
+          Peso:
+          <input type="text" name="peso" placeholder="74kg" />
+        </label>
+        <label for="edad">
+          Edad:
+          <input type="text" name="edad" placeholder="12" />
+        </label>
+        <label for="Raza">
+          Raza:
+          <input type="text" name="raza" placeholder="pincher" />
+        </label>
+        <label for="ubicacion">
+          ubicacion:
+          <input type="text" name="ubicacion" placeholder="venezuela" />
+        </label>
+        <div class="buttons">
+          <button>Guardar</button>
+          <button class="btnCancel">Cancelar</button>
+        </div>
+      </form>
+    </main>
+
+    <main id="edit" >
+      <header>
+        <a href="javascript:;" class="btnBack">
+          <img src="img/btnBack.svg" alt="" />
+        </a>
+        <a href="javascript:;">
+          <img src="img/Edit2.png" alt="" id="editar" />
+        </a>
+        <img src="img/title-info.png" alt="" />
+
+        <img src="img/mascota.png" alt="" id="imgEdit" />
+        <p><strong>Luis</strong></p>
+      </header>
+      <form action="">
+        <label for="Nombre">
+          Nombre
+          <input type="text" name="nombre" value="Firulais" />
+        </label>
+        <label for="Peso">
+          Peso:
+          <input type="text" name="peso" value="10.9kg" />
+        </label>
+        <label for="edad">
+          Edad:
+          <input type="text" name="edad" value="12" />
+        </label>
+        <label for="Raza">
+          Raza:
+          <input type="text" name="raza" value="pincher" />
+        </label>
+        <label for="ubicacion">
+          ubicacion:
+          <input type="text" name="ubicacion" value="ubicacion" />
+        </label>
+      </form>
+    </main>
+
+    <main id="editarPet">
+      <header>
+        <a href="javascript:;" class="btnBack">
+          <img src="img/btnBack.svg" alt="" />
+        </a>
+        <img src="img/title.editar.png" alt="" id="petEdit"/>
+      </header>
+      <form action="">
+        <label for="Nombre">
+          Nombre
+          <input type="text" name="nombre" placeholder="messi Ronaldo" />
+        </label>
+        <label for="Tipo">
+          Tipo:
+          <input type="text" name="tipo" placeholder="Dog" />
+        </label>
+        <label for="Peso">
+          Peso:
+          <input type="text" name="peso" placeholder="74kg" />
+        </label>
+        <label for="edad">
+          Edad:
+          <input type="text" name="edad" placeholder="12" />
+        </label>
+        <label for="Raza">
+          Raza:
+          <input type="text" name="raza" placeholder="pincher" />
+        </label>
+        <label for="ubicacion">
+          ubicacion:
+          <input type="text" name="ubicacion" placeholder="venezuela" />
+        </label>
+      </form>
+    </main>
+    <script src="js/layout.js"></script>
+  </body>
+</html>
