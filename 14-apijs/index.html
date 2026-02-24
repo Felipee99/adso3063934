@@ -5,153 +5,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>API JS: Larapets</title>
     <link rel="stylesheet" href="css/master.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
+
     <!-- View: Login -->
-    <main id="login" >
+    <main id="login">
       <header>
         <img src="img/title-login.png" alt="" />
       </header>
       <form id="loginForm">
-        <label for="email">
+        <label>
           email
-          <input type="email" id="email" name="email" placeholder="example@gmail.com"  required/>
+          <input type="email" name="email" placeholder="example@gmail.com" />
         </label>
-        <label for="password">
+        <label>
           password
-          <input type="password" id="password" name="password" placeholder="********" required/>
+          <input type="password" name="password" placeholder="********" />
         </label>
-        <button class="btnLogin">login</button>
-        </form>
+        <button type="submit" class="btnLogin">login</button>
+      </form>
     </main>
-    <main id="dashboard" >
+
+    <!-- Dashboard -->
+    <main id="dashboard" style="display:none">
       <header>
-        <img src="img/title-dashboard.png" alt="dasboard" />
+        <img src="img/title-dashboard.png" alt="dashboard" />
       </header>
-      <section class="list" id="petList">
-       
+
+      <section class="list">
+        <!-- Aquí se pintan las mascotas dinámicamente -->
       </section>
+
       <nav>
         <a href="javascript:;" class="btnLogout">
           <img src="img/boton.png" alt="" />
         </a>
         <a href="javascript:;" class="btnAdd">
-          <img src="img/boton2png.png" alt="" />
+          <img src="img/boton2.png" alt="" />
         </a>
       </nav>
     </main>
-    <main id="add" >
+
+    <!-- Add -->
+    <main id="add" style="display:none">
       <header>
-        <a href="javascript:;" class="btnBack">
+        <a href="javascript:;" class="btnback">
           <img src="img/btnBack.svg" alt="" />
         </a>
         <img src="img/title-add.png" alt="" />
       </header>
-      <form action="">
-        <label for="Nombre">
+
+      <form>
+        <label>
           Nombre
-          <input type="text" name="nombre" placeholder="messi Ronaldo" />
+          <input type="text" name="nombre" />
         </label>
-        <label for="Tipo">
-          Tipo:
-          <input type="text" name="tipo" placeholder="Dog" />
+        <label>
+          Tipo
+          <input type="text" name="tipo" />
         </label>
-        <label for="Peso">
-          Peso:
-          <input type="text" name="peso" placeholder="74kg" />
+        <label>
+          Peso
+          <input type="text" name="peso" />
         </label>
-        <label for="edad">
-          Edad:
-          <input type="text" name="edad" placeholder="12" />
+        <label>
+          Edad
+          <input type="text" name="edad" />
         </label>
-        <label for="Raza">
-          Raza:
-          <input type="text" name="raza" placeholder="pincher" />
+        <label>
+          Raza
+          <input type="text" name="raza" />
         </label>
-        <label for="ubicacion">
-          ubicacion:
-          <input type="text" name="ubicacion" placeholder="venezuela" />
+        <label>
+          Ubicacion
+          <input type="text" name="ubicacion" />
         </label>
+        <label>
+          Descripcion
+          <input type="text" name="descripcion" />
+        </label>
+
         <div class="buttons">
-          <button>Guardar</button>
-          <button class="btnCancel">Cancelar</button>
+          <button type="submit">Guardar</button>
+          <button type="button" class="btnCancel">Cancelar</button>
         </div>
       </form>
     </main>
 
-    <main id="edit" >
+    <!-- Show -->
+    <main id="show" style="display:none">
       <header>
         <a href="javascript:;" class="btnBack">
           <img src="img/btnBack.svg" alt="" />
         </a>
-        <!-- <a href="javascript:;">
-          <img src="img/Edit2.png" alt="" id="editar" />
-        </a> -->
         <img src="img/title-info.png" alt="" />
-
-        <img src="img/mascota.png" alt="" id="imgEdit" />
-        <p><strong>Luis</strong></p>
       </header>
-      <form action="">
-        <label for="Nombre">
+
+      <div class="pet-image" style="text-align: center; margin-bottom: 20px;">
+        <img id="petImage" src="img/pet.png" alt="pet" style="max-width: 200px; height: auto;" />
+      </div>
+
+      <form>
+        <label>
           Nombre
-          <input type="text" name="nombre" value="Firulais" readonly/>
+          <input type="text" name="nombre" />
         </label>
-        <label for="Peso">
-          Peso:
-          <input type="text" name="peso" value="10.9kg" readonly/>
+        <label>
+          Peso
+          <input type="text" name="peso" />
         </label>
-        <label for="edad">
-          Edad:
-          <input type="text" name="edad" value="12" readonly/>
+        <label>
+          Edad
+          <input type="text" name="edad" />
         </label>
-        <label for="Raza">
-          Raza:
-          <input type="text" name="raza" value="pincher" readonly/>
+        <label>
+          Raza
+          <input type="text" name="raza" />
         </label>
-        <label for="ubicacion">
-          ubicacion:
-          <input type="text" name="ubicacion" value="ubicacion" readonly/>
+        <label>
+          Ubicacion
+          <input type="text" name="ubicacion" />
         </label>
       </form>
     </main>
 
-    <main id="editarPet">
+    <!-- Edit -->
+    <main id="edit" style="display:none">
       <header>
         <a href="javascript:;" class="btnBack">
           <img src="img/btnBack.svg" alt="" />
         </a>
-        <img src="img/title.editar.png" alt="" id="petEdit"/>
+        <img src="img/title.editar.png" alt="" />
       </header>
-      <form action="">
-        <label for="Nombre">
+
+      <form>
+        <label>
           Nombre
-          <input type="text" name="nombre" placeholder="messi Ronaldo" />
+          <input type="text" name="nombre" />
         </label>
-        <label for="Tipo">
-          Tipo:
-          <input type="text" name="tipo" placeholder="Dog" />
+        <label>
+          Tipo
+          <input type="text" name="tipo" />
         </label>
-        <label for="Peso">
-          Peso:
-          <input type="text" name="peso" placeholder="74kg" />
+        <label>
+          Peso
+          <input type="text" name="peso" />
         </label>
-        <label for="edad">
-          Edad:
-          <input type="text" name="edad" placeholder="12" />
+        <label>
+          Edad
+          <input type="text" name="edad" />
         </label>
-        <label for="Raza">
-          Raza:
-          <input type="text" name="raza" placeholder="pincher" />
+        <label>
+          Raza
+          <input type="text" name="raza" />
         </label>
-        <label for="ubicacion">
-          ubicacion:
-          <input type="text" name="ubicacion" placeholder="venezuela" />
+        <label>
+          Ubicacion
+          <input type="text" name="ubicacion" />
         </label>
+        <label>
+          Descripcion
+          <input type="text" name="descripcion" />
+        </label>
+
+        <div class="buttons">
+          <button type="submit">Guardar</button>
+        </div>
       </form>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.18/dist/sweetalert2.all.min.js"></script>
+
     <script src="js/app.js"></script>
   </body>
 </html>

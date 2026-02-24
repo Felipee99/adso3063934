@@ -79,6 +79,8 @@ body {
         /* padding-top: 4rem; */
         display: flex;
         justify-content: space-around;
+        z-index: 50;
+        position: relative;
         a:link,
         a:visited {
           backdrop-filter: blur(40px);
@@ -177,9 +179,11 @@ body {
       }
     }
 
+    /* opko */
+
     &#add {
       background-image: url(../img/fondo.png);
-      background-size: cover;
+      /* background-size: cover; */
       form {
         backdrop-filter: blur(4px);
         display: flex;
@@ -244,7 +248,7 @@ body {
       }
     }
 
-    &#edit {
+    &#show {
       background-image: url(../img/fondo.png);
       background-size: 259px 430px;
       background-position: bottom;
@@ -365,7 +369,7 @@ body {
     }
     }
 
-    &#editarPet {
+    &#edit {
       background-image: url(../img/fondo.png);
       background-size: cover;
       #petEdit{
