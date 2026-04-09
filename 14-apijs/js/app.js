@@ -4,7 +4,7 @@
 const API = "http://127.0.0.1:8000/api/";
 const STORAGE = "http://127.0.0.1:8000/"; // URL base para Laravel public
 let token = localStorage.getItem("authToken");
-let currentEditId = null;
+let currentEditId = null; 
 let currentPetId = null;
 
 // ===================================
